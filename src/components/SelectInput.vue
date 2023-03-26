@@ -1,22 +1,31 @@
 <template>
   <div class="select-input">
-    <div class="select-input__wrapper" @click="toggleList">
-      <div v-if="hasSelectedOptions" class="select-input__tags">
-        <InputTag
-          v-for="tag in selectedOptions"
-          :key="tag"
-          :tag="tag"
-          @remove="handleRemove"
+    <div class="select-input__wrapper">
+      <div class="select-input__tags">
+        <template v-if="hasSelectedOptions">
+          <InputTag
+            v-for="tag in selectedOptions"
+            :key="tag"
+            :tag="tag"
+            @remove="handleRemove"
+          />
+        </template>
+        <input
+          v-model="searchTerm"
+          type="text"
+          class="select-list__search"
+          autofocus
+          placeholder="Please type at least 3 characters"
+          @input="handleSearch"
         />
-      </div>
-      <div class="select-input__icon">
-        <font-awesome-icon :icon="['fas', 'chevron-down']" />
       </div>
     </div>
     <SelectList
       v-if="showList"
+      ref="selectList"
       :options="options"
-      @search="handleSearch"
+      :selected-options="selectedOptions"
+      :search-term="formattedSearchTerm"
       @select="handleSelect"
     />
   </div>
@@ -40,31 +49,35 @@ export default {
   data() {
     return {
       selectedOptions: [],
-      isSearching: false,
-      showList: false,
+      searchTerm: null,
     }
   },
   computed: {
     hasSelectedOptions() {
       return this.selectedOptions.length > 0
     },
+    showList() {
+      return this.formattedSearchTerm?.length >= 3
+    },
+    formattedSearchTerm() {
+      return this.searchTerm?.trim().toLowerCase()
+    },
   },
   methods: {
-    handleSearch(searchTerm) {
-      if (searchTerm.length >= 3) {
-        this.isSearching = true
-      }
-    },
     handleSelect(selectedOption) {
-      this.selectedOptions.push(selectedOption)
+      if (!this.selectedOptions.includes(selectedOption)) {
+        this.selectedOptions.push(selectedOption)
+      }
     },
     handleRemove(removedOption) {
       this.selectedOptions = this.selectedOptions.filter(
         (option) => option !== removedOption
       )
     },
-    toggleList() {
-      this.showList = !this.showList
+    handleSearch() {
+      if (this.showList) {
+        this.$refs.selectList.getPartialMatch()
+      }
     },
   },
 }
@@ -72,28 +85,34 @@ export default {
 
 <style lang="scss">
 .select-input {
-  border: 1px solid #f4f4f4;
+  border: 1px solid #dfe3e8;
   border-radius: 4px;
+}
 
-  &__wrapper {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 8px;
+.select-input__wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 8px;
 
-    &:focus {
-      border-color: #3399ff;
-    }
+  &:focus {
+    border-color: #3399ff;
   }
+}
 
-  &__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px 6px;
-  }
+.select-list__search {
+  flex: auto;
+  border: none;
 
-  &__icon {
-    margin-left: auto;
+  &:focus {
+    outline: none;
   }
+}
+
+.select-input__tags {
+  display: flex;
+  flex: auto;
+  flex-wrap: wrap;
+  gap: 4px 6px;
 }
 </style>

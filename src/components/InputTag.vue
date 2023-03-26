@@ -36,12 +36,12 @@ export default {
   background-color: #3399ff;
   gap: 5px;
 
-  &__label {
-    color: #ffffff;
-  }
-
   svg:hover {
     cursor: pointer;
   }
+}
+
+.input-tag__label {
+  color: #ffffff;
 }
 </style>

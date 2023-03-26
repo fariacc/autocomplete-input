@@ -1,24 +1,24 @@
 <template>
   <div class="select-list">
-    <input
-      v-model="searchTerm"
-      type="text"
-      class="select-list__search"
-      @input="handleSearch"
-    />
-    <p v-if="showEmptyResults">
-      No results found. Try a different search term.
-    </p>
-    <ul>
-      <li
-        v-for="option in filteredOptions"
-        :key="option"
-        :class="{ 'select-list__item--selected': getSelectedOptions(option) }"
-        @click="handleSelect(option)"
-      >
-        {{ option }}
-      </li>
-    </ul>
+    <div class="select-list__wrapper">
+      <ul v-if="hasOptionsListed">
+        <li
+          v-for="option in filteredOptions"
+          :key="option"
+          class="select-list__item"
+          :class="{
+            'select-list__item--selected': checkSelectedOption(option),
+          }"
+          @click="handleSelect(option)"
+        >
+          <span class="select-list__item-text">{{ option }}</span>
+          <span class="select-list__item-text--copy"></span>
+        </li>
+      </ul>
+      <p v-else class="select-list__empty-results">
+        No results found. Try a different search term.
+      </p>
+    </div>
   </div>
 </template>
 
@@ -30,47 +30,48 @@ export default {
       type: Array,
       default: () => [],
     },
+    searchTerm: {
+      type: String,
+      default: null,
+    },
+    selectedOptions: {
+      type: Array,
+      default: () => [],
+    },
   },
-  emits: ['search', 'select'],
-  data() {
-    return {
-      searchTerm: null,
-      selectedOption: null,
-      showEmptyResults: false,
-    }
-  },
+  emits: ['select'],
   computed: {
     filteredOptions() {
       if (this.searchTerm?.length >= 3) {
         return this.options.filter(
-          (option) => option.indexOf(this.searchTerm.toLowerCase()) !== -1
+          (option) => option.indexOf(this.searchTerm) !== -1
         )
       }
 
       return this.options
     },
-
     hasOptionsListed() {
       return this.filteredOptions.length > 0
     },
   },
   methods: {
-    handleSearch() {
-      if (this.hasOptionsListed) {
-        this.$emit('search', this.filteredOptions)
-        this.showEmptyResults = false
-      } else {
-        this.showEmptyResults = true
-      }
-    },
     handleSelect(option) {
-      this.selectedOption = option
-      this.$emit('select', this.selectedOption)
+      this.$emit('select', option)
     },
-    getSelectedOptions(option) {
-      console.log(this.options)
-      console.log(option)
-      return this.options.includes(option)
+    checkSelectedOption(option) {
+      return this.selectedOptions.includes(option)
+    },
+    getPartialMatch() {
+      const originalTexts = document.querySelectorAll('.select-list__item-text')
+      const copy = document.querySelectorAll('.select-list__item-text--copy')
+      originalTexts.forEach((text, i) => {
+        text.classList.add('select-list__item-text--hidden')
+        copy[i].innerHTML = text.innerHTML
+          .split(this.searchTerm)
+          .join(
+            `<span class="select-list__item-text--match">${this.searchTerm}</span>`
+          )
+      })
     },
   },
 }
@@ -78,10 +79,42 @@ export default {
 
 <style lang="scss">
 .select-list {
-  padding: 10px;
-
-  &__search {
-    background-color: #f4f4f4;
+  ul {
+    margin: 0;
+    padding: 0;
   }
+}
+
+.select-list__wrapper {
+  border-top: 1px solid #dfe3e8;
+  max-height: 140px;
+  overflow: auto;
+}
+
+.select-list__item {
+  list-style: none;
+  padding: 5px 8px;
+
+  &:hover {
+    background-color: #dfe3e8;
+  }
+
+  &--selected {
+    background-color: #cdddee;
+  }
+}
+
+.select-list__item-text {
+  &--hidden {
+    display: none;
+  }
+
+  &--match {
+    color: #3399ff;
+  }
+}
+
+.select-list__empty-results {
+  margin-top: 0;
 }
 </style>
