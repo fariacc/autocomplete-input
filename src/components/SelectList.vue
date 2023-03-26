@@ -11,8 +11,11 @@
           }"
           @click="handleSelect(option)"
         >
-          <span class="select-list__item-text">{{ option }}</span>
-          <span class="select-list__item-text--copy"></span>
+          <span class="select-list__item-text">
+            {{ getOptionText(option) }}
+          </span>
+          <span class="select-list__item-text--empty"></span>
+          <span v-if="!isArrayOfStrings"> by {{ option.author }}</span>
         </li>
       </ul>
       <p v-else class="select-list__empty-results">
@@ -44,29 +47,44 @@ export default {
     filteredOptions() {
       if (this.searchTerm?.length >= 3) {
         return this.options.filter(
-          (option) => option.indexOf(this.searchTerm) !== -1
+          (option) =>
+            this.getOptionText(option)
+              .toLowerCase()
+              .indexOf(this.searchTerm) !== -1
         )
       }
-
       return this.options
     },
     hasOptionsListed() {
       return this.filteredOptions.length > 0
     },
+    isArrayOfStrings() {
+      return typeof this.options[0] === 'string'
+    },
   },
   methods: {
     handleSelect(option) {
-      this.$emit('select', option)
+      this.$emit('select', this.getOptionText(option))
+    },
+    getOptionText(option) {
+      if (this.isArrayOfStrings) {
+        return option
+      } else {
+        return option.title.toLowerCase()
+      }
     },
     checkSelectedOption(option) {
-      return this.selectedOptions.includes(option)
+      return this.selectedOptions.includes(this.getOptionText(option))
     },
     getPartialMatch() {
-      const originalTexts = document.querySelectorAll('.select-list__item-text')
-      const copy = document.querySelectorAll('.select-list__item-text--copy')
-      originalTexts.forEach((text, i) => {
-        text.classList.add('select-list__item-text--hidden')
-        copy[i].innerHTML = text.innerHTML
+      const originalSpans = document.querySelectorAll('.select-list__item-text')
+      const emptySpans = document.querySelectorAll(
+        '.select-list__item-text--empty'
+      )
+      originalSpans.forEach((span, i) => {
+        span.classList.add('select-list__item-text--hidden')
+        emptySpans[i].innerHTML = span.innerHTML
+          .toLowerCase()
           .split(this.searchTerm)
           .join(
             `<span class="select-list__item-text--match">${this.searchTerm}</span>`
@@ -97,10 +115,15 @@ export default {
 
   &:hover {
     background-color: #dfe3e8;
+    color: #000000;
+
+    .select-list__item-text--match {
+      color: #3399ff;
+    }
   }
 
   &--selected {
-    background-color: #cdddee;
+    background-color: #3399ff;
   }
 }
 
@@ -110,11 +133,13 @@ export default {
   }
 
   &--match {
-    color: #3399ff;
+    color: #ffffff;
   }
 }
 
 .select-list__empty-results {
-  margin-top: 0;
+  margin: 0;
+  padding: 8px;
+  color: #dfe3e8;
 }
 </style>

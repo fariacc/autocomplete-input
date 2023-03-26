@@ -1,14 +1,20 @@
 <template>
-  <SearchForm />
+  <Home />
 </template>
 
 <script>
-import SearchForm from './components/SearchForm.vue'
-
+import Home from './components/Home.vue'
 export default {
   name: 'App',
   components: {
-    SearchForm,
+    Home,
   },
 }
 </script>
+
+<style lang="scss">
+body {
+  margin: 0;
+  font-family: Helvetica;
+}
+</style>

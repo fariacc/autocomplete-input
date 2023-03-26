@@ -1,83 +1,31 @@
 <template>
   <div class="search-form">
-    <SelectInput :label="cities.label" :options="cities.options" />
-    <!-- <SelectInput :label="books.label" :options="books.options" /> -->
+    <SelectInput :options="cities" field-label="Cities" field-id="cities" />
+    <SelectInput :options="books" field-label="Books" field-id="books" />
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import SelectInput from './SelectInput.vue'
 export default {
   name: 'SearchForm',
   components: {
     SelectInput,
   },
-  data() {
-    return {
-      cities: {
-        label: 'Cities',
-        options: [
-          'san jose',
-          'santiago',
-          'san francisco',
-          'santa rosa',
-          'san juan',
-          'sabadell',
-          'salamanca',
-          'salt lake city',
-          'salinas',
-          'salem',
-          'sausalito',
-          'taipei',
-          'tel aviv',
-          'tempe',
-          'termez',
-          'temuco',
-          'tiajuna',
-          'tieling',
-          'thousand oaks',
-          'thunder bay',
-          'tokyo',
-          'tulsa',
-        ],
-      },
-
-      books: {
-        label: 'Books',
-        options: [
-          {
-            title: 'Don Quixote',
-            author: 'Miguel De Cervantes',
-          },
-          {
-            title: "Pilgrim's Progress",
-            author: 'John Bunyan',
-          },
-          {
-            title: 'Robinson Crusoe',
-            author: 'Daniel Defoe',
-          },
-          {
-            title: "Gulliver's Travels",
-            author: 'Jonathan Swift',
-          },
-          {
-            title: 'Tom Jones',
-            author: 'Henry Fielding',
-          },
-          {
-            title: 'Clarissa',
-            author: 'Samuel Richardson',
-          },
-          {
-            title: 'Tristram Shandy',
-            author: 'Laurence Sterne',
-          },
-        ],
-      },
-    }
+  computed: {
+    ...mapGetters({
+      cities: 'getCities',
+      books: 'getBooks',
+    }),
   },
 }
 </script>
 
-<style></style>
+<style lang="scss">
+.search-form {
+  padding: 30px 60px;
+  border: 2px solid #dfe3e8;
+  border-radius: 4px;
+}
+</style>

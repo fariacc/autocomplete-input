@@ -9,10 +9,6 @@
 export default {
   name: 'InputTag',
   props: {
-    // tag: {
-    //   type: Object,
-    //   default: () => ({}),
-    // },
     tag: {
       type: String,
       default: null,
@@ -38,6 +34,7 @@ export default {
 
   svg:hover {
     cursor: pointer;
+    color: #dfe3e8;
   }
 }
 
