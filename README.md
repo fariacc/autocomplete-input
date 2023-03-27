@@ -1,24 +1,41 @@
-# autocomplete-input
+# Autocomplete input
+
+A simple autcomplete app to search cities by their names and books by their titles.
+
+Built using VueJS v3.0.
+
+## Functionalities
+
+- Autofocus on Cities input when loading page
+- Display a filtered list of cities when search term has at least 3 characters
+- Display a filtered list of books when search term has at least 3 characters
+- Highlight matching characters when searching
+- Select list options
+- Remove selected elements
+
+## How to run
+
+Clone/download the [autocomplete-input](https://github.com/fariacc/autocomplete-input) repository.
 
 ## Project setup
-```
+
+```bash
 yarn install
 ```
 
 ### Compiles and hot-reloads for development
-```
+
+```bash
 yarn serve
 ```
 
-### Compiles and minifies for production
-```
-yarn build
+## Running tests
+
+Run the unit tests by using the following commands:
+```bash
+  yarn test:unit
 ```
 
-### Lints and fixes files
-```
-yarn lint
-```
+## Author
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- [fariacc](https://github.com/fariacc)
