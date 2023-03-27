@@ -1,5 +1,5 @@
 <template>
-  <div class="input-tag">
+  <div v-if="tag" class="input-tag">
     <span>{{ tag }}</span>
     <font-awesome-icon :icon="['fas', 'circle-xmark']" @click="handleRemove" />
   </div>

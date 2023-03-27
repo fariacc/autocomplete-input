@@ -21,11 +21,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss">
-.search-form {
-  padding: 30px 60px;
-  border: 2px solid #dfe3e8;
-  border-radius: 4px;
-}
-</style>
