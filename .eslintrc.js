@@ -13,12 +13,13 @@ module.exports = {
     'plugin:jest-dom/recommended',
   ],
   parser: 'vue-eslint-parser',
-  parserOptions: {},
   plugins: ['testing-library', 'jest-dom', 'jest'],
-  rules: {},
   overrides: [
     {
-      files: ['**/__tests__/*.{j}s?(x)'],
+      files: [
+        '**/__tests__/*.{j,t}s?(x)',
+        '**/tests/unit/**/*.spec.{j,t}s?(x)',
+      ],
       env: {
         jest: true,
       },

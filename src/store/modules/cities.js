@@ -32,19 +32,4 @@ export default {
   getters: {
     getCities: (state) => state.cities,
   },
-  mutations: {
-    setCities(state, cities) {
-      state.cities = cities
-    },
-  },
-  actions: {
-    loadCities({ commit }, searchTerm) {
-      let cities = defaultState()
-
-      if (searchTerm.length >= 3) {
-        cities = cities.filter((city) => city.indexOf(searchTerm) !== -1)
-      }
-      commit('setCities', cities)
-    },
-  },
 }

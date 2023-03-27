@@ -18,7 +18,7 @@
           <span v-if="!isArrayOfStrings"> by {{ option.author }}</span>
         </li>
       </ul>
-      <p v-else class="select-list__empty-results">
+      <p v-else-if="hasEmptyResults" class="select-list__empty-results">
         No results found. Try a different search term.
       </p>
     </div>
@@ -60,6 +60,9 @@ export default {
     },
     isArrayOfStrings() {
       return typeof this.options[0] === 'string'
+    },
+    hasEmptyResults() {
+      return !this.hasOptionsListed && this.searchTerm?.length >= 3
     },
   },
   methods: {

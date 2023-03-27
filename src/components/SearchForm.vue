@@ -7,7 +7,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import SelectInput from './SelectInput.vue'
+import SelectInput from './Select/SelectInput.vue'
 export default {
   name: 'SearchForm',
   components: {

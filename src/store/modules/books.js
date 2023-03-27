@@ -17,21 +17,4 @@ export default {
   getters: {
     getBooks: (state) => state.books,
   },
-  mutations: {
-    setBooks(state, books) {
-      state.books = books
-    },
-  },
-  actions: {
-    loadBooks({ commit }, searchTerm) {
-      let books = defaultState()
-
-      if (searchTerm.length >= 3) {
-        books = books.filter(
-          (book) => book.title.toLowerCase().indexOf(searchTerm) !== -1
-        )
-      }
-      commit('setBooks', books)
-    },
-  },
 }
